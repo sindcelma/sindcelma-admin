@@ -1,17 +1,19 @@
-const submenus = {
+let socios = [
+    {
+        nome:'Lista',
+        link:'/socios'
+    },
+    {
+        nome:'Novo Sócio',
+        link:'/socios/new'
+    }
+];
+
+var submenus = {
 
     home:[],
     estatisticas:[],
-    socios:[
-        {
-            nome:'Lista',
-            link:'/socios'
-        },
-        {
-            nome:'Novo Sócio',
-            link:'/socios/new'
-        }
-    ],
+    socios:socios,
     sorteios:[
         {
             nome:'Lista',
@@ -36,6 +38,11 @@ const submenus = {
 }
 
 export default {
+
+    setSubmenu:(key:string, obj:{nome:string, link:string}) => {
+        submenus[key].push(obj)
+    },
+
     getSubmenu:(path:string):any[] => {
         const pathArr = path.split('/')
         const index = pathArr[1]

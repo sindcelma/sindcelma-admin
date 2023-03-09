@@ -14,7 +14,16 @@ const router = createRouter({
       name: 'Home',
       component: () => import('@/pages/home/HomePage.vue')
     },
-    
+    {
+      path: '/convenios',
+      name: 'Convênios',
+      component: () => import('@/pages/convenios/ConveniosPage.vue')
+    },
+    {
+      path: '/user',
+      name: 'Area do Usuáro',
+      component: () => import('@/pages/user/UserArea.vue')
+    },
     {
       path: '/socios',
       name: 'Socios',
@@ -29,6 +38,11 @@ const router = createRouter({
       path: '/socios/new',
       name: 'Novo Sócio',
       component: () => import('@/pages/socios/AdicionarSocio.vue')
+    },
+    {
+      path: '/socios/Ghosts',
+      name: 'Ghosts',
+      component: () => import('@/pages/socios/GhostsPage.vue')
     },
     {
       path: '/sorteios',
@@ -54,6 +68,11 @@ const router = createRouter({
       path: '/cct/new',
       name: 'Adicionar CCT',
       component: () => import('@/pages/cct/AdicionarCCT.vue')
+    },
+    {
+      path: '/admin',
+      name: 'Admin',
+      component: () => import('@/pages/admin/ListAdmins.vue')
     },
     {
       path: '/estatisticas',

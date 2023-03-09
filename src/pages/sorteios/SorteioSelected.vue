@@ -172,9 +172,6 @@ export default defineComponent({
 
             let sorteio = res.message()[0]
 
-            console.log(sorteio);
-            
-
             this.status = sorteio['ativo']
             this.titulo = sorteio['titulo']
             this.premios = sorteio['premios']

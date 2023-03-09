@@ -46,13 +46,19 @@ export default defineComponent({
             const response = await request.uri('user/rememberme').post({
                 rememberme:cookie,
                 type:'Admin'
-            })
+            }) 
             
             if(response.code() == 200){
                 const message = response.message()
                 request.setSession(message.session)
-                User.email = message.user.email
+                
+                User.email  = message.user.email
+                User.nome   = message.user.nome
+                User.access = message.user.access
+                User.master = message.user.master
+
                 this.component = 'MainPage'
+                
                 return
             } 
 

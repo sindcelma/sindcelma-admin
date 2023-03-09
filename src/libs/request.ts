@@ -86,7 +86,7 @@ async function get(uri:string){
     }
 }
 
-async function post(uri:string, data:{session?:string}, upload:boolean = false){
+async function post(uri:string, data:{session?:string}, upload:boolean = false, full:boolean = false, download:boolean = false):Promise<ResponseRequest>{
     try {
 
         const atualSection = ConfigRequest.section()
@@ -95,7 +95,31 @@ async function post(uri:string, data:{session?:string}, upload:boolean = false){
             data.session = atualSection
         }
         
-        const response = await fetch(upload ? ConfigRequest.file(uri) : ConfigRequest.api(uri), {
+        let url = uri
+
+        if(!full){
+            url = upload ? ConfigRequest.file(uri) : ConfigRequest.api(uri)
+        }
+
+        if(download){
+            await fetch(url, {
+                method:'POST',
+                body:JSON.stringify(data)
+            })
+            .then( res => res.blob() )
+            .then( blob => {
+                var file = window.URL.createObjectURL(blob);
+                var a = document.createElement('a');
+                a.download = url;
+                a.href = file;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            });
+            return new ResponseRequest({message:''}, 800)
+        }
+
+        const response = await fetch(url, {
             method:'POST',
             headers: {
                 'content-type': 'application/json;charset=UTF-8',
@@ -104,6 +128,7 @@ async function post(uri:string, data:{session?:string}, upload:boolean = false){
         })
         
         let textResponse = await response.text()
+        //console.log(textResponse);
         
         if(response.status == 401) {
             callback_close()
@@ -149,10 +174,10 @@ async function commit(dir:string, ext:string, slug:string){
 
 export default {
 
-    uri: (uri:string) => {
+    uri: (uri:string, full:boolean = false, download:boolean = false) => {
         return {
             get: async () => await get(uri),
-            post: async (data:{}) => await post(uri, data)
+            post: async (data:{}):Promise<ResponseRequest> => await post(uri, data, false, full, download)
         }
     },
 
