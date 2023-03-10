@@ -78,7 +78,12 @@ const router = createRouter({
       path: '/estatisticas',
       name: 'Estatísticas',
       component: () => import('@/pages/estatisticas/EstatisticasPage.vue')
-    }
+    },
+    {
+      path: '/noticias',
+      name: 'Notícias',
+      component: () => import('@/pages/noticias/NoticiasPage.vue')
+    },
 
   ]
 })
