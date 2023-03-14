@@ -6,36 +6,35 @@
         <button @click="hideForm" type="button" class="btn-close p-2 m-2 rounded bg-danger" aria-label="Close" style="float:right; color:white"></button>
         <component 
             :is="component" 
-            :noticiaSel="noticia"
-            @addNoticia="onAddNoticia" 
-            @deleteNoticia="onDeleteNoticia" 
-            @changeNoticia="onChangeNoticia"
+            :comunicadoSel="comunicado"
+            @addComunicado="onAddComunicado" 
+            @deleteComunicado="onDeleteComunicado" 
+            @changeComunicado="onChangeComunicado"
             @error="onError"
         />
     </div>
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 py-2">
-                <button @click="novaNoticia" type="button" class="btn btn-info">Nova Noticia</button>
+                <button @click="novoComunicado" type="button" class="btn btn-info">Novo Comunicado</button>
             </div>
+            <hr>
             <div class="col-12">
                 <div class="row">
-                    <div class="col-12 col-md-4 col-lg-3" v-for="not, key in noticias" :key="key">
+                    <div class="col-12 col-md-4 col-lg-3" v-for="com, key in comunicados" :key="key">
                         <div class="card">
-                            <img :src="not.imagem" class="card-img-top" >
+                            <div v-if="com.image">
+                                <img :src="com.image" class="card-img-top" >
+                            </div>
                             <div class="card-body">
-                                <h5 class="card-title">{{ not.titulo }}</h5>
-                                <p>{{ not.subtitulo }}</p>
-                                <button @click="openNoticia(key)" type="button" class="btn btn-primary">editar</button>
+                                <h5 class="card-title">{{ com.titulo }}</h5>
+                                <span>Expira em: {{ helper.dateToBr(com.expire) }}</span>
+                                <p>{{ com.texto }}</p>
+                                <button @click="openComunicado(key)" type="button" class="btn btn-primary">editar</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col py-5" v-show="showMoreBtn">
-                <button @click="carregarMais" class="btn btn-success mx-auto d-block" >carregar mais noticias</button>
             </div>
         </div>
     </div>
@@ -43,25 +42,27 @@
 
 <script lang="ts" setup>
 import { defineComponent } from 'vue';
-import AddNoticia from './AddNoticia.vue';
-import EditNoticia from './EditNoticia.vue';
 import Alert from '@/components/Alert.vue';
 import request from '@/libs/request';
+import helper from '@/libs/helpers'
+import AddComunicado from './AddComunicado.vue';
+import EditComunicado from './EditComunicado.vue';
 </script>
 
 <script lang="ts">
 
-interface Noticia {
+interface Comunicado {
     id:number,
     titulo:string,
-    imagem:string,
-    subtitulo:string
+    image:string | null,
+    texto:string,
+    expire:string
 }
 
 interface data {
     
-    noticias:Noticia[],
-    noticia:Noticia | null,
+    comunicados:Comunicado[],
+    comunicado:Comunicado | null,
 
     showAlert:boolean,
     msg:string,
@@ -70,7 +71,6 @@ interface data {
 
     showForm:boolean,
     component:string,
-    page:number,
     showMoreBtn:boolean
 
 }
@@ -82,14 +82,14 @@ export default defineComponent({
     },
 
     components:{
-        AddNoticia, EditNoticia, Alert
+        Alert, AddComunicado, EditComunicado
     },
 
     data():data {
         return {
 
-            noticias:[],
-            noticia:null,
+            comunicados:[],
+            comunicado:null,
 
             showAlert:false,
             msg:'',
@@ -98,7 +98,6 @@ export default defineComponent({
 
             showForm:false,
             component:'',
-            page:1,
             showMoreBtn:true
 
         }
@@ -107,26 +106,12 @@ export default defineComponent({
     methods: {
 
         async list(){
-            
-            let req = await request.uri('noticias/list/'+this.page).post({})
-            
-            let nots:Noticia[] = []
-
-            if(req.code() == 200){
-                nots = req.message()
-                nots.forEach(not => this.noticias.push(not));
-                this.showMoreBtn = nots.length > 0
-            }
-            
+            let req = await request.uri('comunicados/list_active').get()
+            if(req.code() == 200) this.comunicados = req.message()
         },
 
-        async carregarMais(){
-            this.page = this.page + 1
-            this.list()
-        },
-
-        novaNoticia(){
-            this.component = 'AddNoticia'
+        novoComunicado(){
+            this.component = 'AddComunicado'
             this.showForm = true
         },
 
@@ -145,29 +130,27 @@ export default defineComponent({
             this.showForm = false
         },
 
-        openNoticia(key:number){
-            this.noticia = this.noticias[key]
-            this.component = 'EditNoticia'
+        openComunicado(key:number){
+            this.comunicado = this.comunicados[key]
+            this.component = 'EditComunicado'
             this.showForm = true
         },
 
-        onAddNoticia(){
+        onAddComunicado(){
             this.showForm = false
-            this.showMessage('Noticia adicionada com sucesso!', 'success')
-            this.noticias = []
-            this.page = 1
+            this.showMessage('Comunicado adicionado com sucesso!', 'success')
+            this.comunicados = []
             this.list()
         },
 
-        onChangeNoticia(){
-            this.showMessage('Noticia alterada com sucesso!', 'success')
+        onChangeComunicado(){
+            this.showMessage('Comunicado alterado com sucesso!', 'success')
         },
 
-        onDeleteNoticia(){
+        onDeleteComunicado(){
             this.showForm = false
-            this.showMessage('Noticia deletada com sucesso!', 'success')
-            this.noticias = []
-            this.page = 1
+            this.showMessage('Comunicado desativado com sucesso!', 'success')
+            this.comunicados = []
             this.list()
         },
 

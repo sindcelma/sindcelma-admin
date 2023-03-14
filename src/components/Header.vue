@@ -29,9 +29,11 @@
                     <li class="nav-item">
                         <router-link to="/convenios" class="nav-link">convênios</router-link>
                     </li>
+                    <!-- 
                     <li class="nav-item">
                         <router-link to="/cct" class="nav-link">cct</router-link>
                     </li>
+                    -->
                     <li class="nav-item">
                         <router-link to="/socios" class="nav-link">socios</router-link>
                     </li>

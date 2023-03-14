@@ -59,6 +59,7 @@ const router = createRouter({
       name: 'Novo Sorteio',
       component: () => import('@/pages/sorteios/AdicionarSorteio.vue')
     },
+    /*
     {
       path: '/cct',
       name: 'CCT',
@@ -69,6 +70,7 @@ const router = createRouter({
       name: 'Adicionar CCT',
       component: () => import('@/pages/cct/AdicionarCCT.vue')
     },
+    */
     {
       path: '/admin',
       name: 'Admin',
@@ -83,6 +85,11 @@ const router = createRouter({
       path: '/noticias',
       name: 'Notícias',
       component: () => import('@/pages/noticias/NoticiasPage.vue')
+    },
+    {
+      path: '/comunicados',
+      name: 'Comunicados',
+      component: () => import('@/pages/comunicados/ComunicadosPage.vue')
     },
 
   ]
