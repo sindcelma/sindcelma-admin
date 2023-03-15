@@ -95,11 +95,7 @@ async function post(uri:string, data:{session?:string}, upload:boolean = false, 
             data.session = atualSection
         }
         
-        let url = uri
-
-        if(!full){
-            url = upload ? ConfigRequest.file(uri) : ConfigRequest.api(uri)
-        }
+        let url = ConfigRequest.api(uri)
 
         if(download){
             await fetch(url, {
@@ -122,6 +118,7 @@ async function post(uri:string, data:{session?:string}, upload:boolean = false, 
         const response = await fetch(url, {
             method:'POST',
             headers: {
+                'accept':'*/*',
                 'content-type': 'application/json;charset=UTF-8',
             },
             body:JSON.stringify(data)
@@ -142,10 +139,12 @@ async function post(uri:string, data:{session?:string}, upload:boolean = false, 
 
 
 async function create(dir:string, ext:string){
-    const resp = await post('api/admin_file/create', {
+    
+    const resp = await post('files/admin/create', {
         ext: ext,
         dir: dir
     }, true)
+    console.log('created');
     
     if(resp && resp.code() == 200)
         return resp.message().slug
@@ -153,7 +152,8 @@ async function create(dir:string, ext:string){
 }
 
 async function append(dir:string, ext:string, slug:string, data:string){
-    const resp = await post('api/admin_file/append', {
+    console.log('appended');
+    const resp = await post('files/admin/append', {
         ext: ext,
         dir: dir,
         slug:slug,
@@ -163,7 +163,8 @@ async function append(dir:string, ext:string, slug:string, data:string){
 }
 
 async function commit(dir:string, ext:string, slug:string){
-    const resp = await post('api/admin_file/commit', {
+    console.log('commited');
+    const resp = await post('files/admin/commit', {
         ext: ext,
         dir: dir,
         slug:slug

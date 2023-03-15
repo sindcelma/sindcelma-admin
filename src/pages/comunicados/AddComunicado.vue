@@ -10,7 +10,7 @@
                     </div>
                     <div class="col-6">
                         <h5>Adicionar imagem:</h5>
-                        <UploadFile text="Fazer upload" dir="images/noticias" @onUploaded="uploaded"/>
+                        <UploadFile text="Fazer upload" dir="images/comunicados" @onUploaded="uploaded"/>
                     </div>
                 </div>
                 <div class="mb-3">

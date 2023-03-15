@@ -1,4 +1,4 @@
-const production:boolean = false;
+const production:boolean = true;
 
 export default class Config {
 
