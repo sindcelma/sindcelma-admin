@@ -19,19 +19,24 @@
                     </div>
                 </div>
             </div>
-            <div class="col-4 py-2">
+            <div class="col-2 py-2">
                 <div class="mb-3">
-                    <label class="form-label">Quantidade de vencedores</label>
+                    <label class="form-label">Qtd. de Vencedores</label>
                     <input v-model="qtvencedores" type="number" class="form-control" placeholder="0">
                     <div v-if="error[2]">
                         <small class="text-danger">{{ errorMsg[2] }}</small>
                     </div>
                 </div>
             </div>
-            <div class="col-4 py-2">
+            <div class="col-2 py-2">
                 <div class="mb-3">
-                    <label class="form-label">Data do Sorteio</label>
-                    <input v-model="datasorteio" type="date" class="form-control" placeholder="Data do Sorteio">
+                    <label class="form-label">Para aparelhos:</label>
+                    <select v-model="tipo">
+                        <option disabled value="">Selecione</option>
+                        <option>todos</option>
+                        <option>android</option>
+                        <option>ios</option>
+                    </select>
                     <div v-if="error[3]">
                         <small class="text-danger">{{ errorMsg[3] }}</small>
                     </div>
@@ -39,10 +44,19 @@
             </div>
             <div class="col-4 py-2">
                 <div class="mb-3">
-                    <label class="form-label">Data máxima para inscrição</label>
-                    <input v-model="datainscr" type="date" class="form-control" placeholder="Data máxima para inscrição">
+                    <label class="form-label">Data do Sorteio</label>
+                    <input v-model="datasorteio" type="date" class="form-control" placeholder="Data do Sorteio">
                     <div v-if="error[4]">
                         <small class="text-danger">{{ errorMsg[4] }}</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 py-2">
+                <div class="mb-3">
+                    <label class="form-label">Data máxima para inscrição</label>
+                    <input v-model="datainscr" type="date" class="form-control" placeholder="Data máxima para inscrição">
+                    <div v-if="error[5]">
+                        <small class="text-danger">{{ errorMsg[5] }}</small>
                     </div>
                 </div>
             </div>
@@ -69,7 +83,8 @@ export default defineComponent({
             qtvencedores:0,
             datasorteio:"",
             datainscr:"",
-            error:[false,false,false,false,false],
+            tipo:"todos",
+            error:[false,false,false,false,false,false],
             errorMsg:['', '', '', '', '', '']
         }
     },
@@ -97,31 +112,40 @@ export default defineComponent({
                 this.errorMsg[1] = ''
             }
 
-            if(this.qtvencedores < 1){
+            if(this.tipo.trim() == ""){
                 this.error[2] = true
-                this.errorMsg[2] = 'A quantidade tem que ser maior que 0'
+                this.errorMsg[2] = 'Este campo não pode estar vazio'
                 status = false
             } else {
                 this.error[2] = false
                 this.errorMsg[2] = ''
             }
 
-            if(this.datasorteio.trim() == ""){
+            if(this.qtvencedores < 1){
                 this.error[3] = true
-                this.errorMsg[3] = 'Este campo não pode estar vazio'
+                this.errorMsg[3] = 'A quantidade tem que ser maior que 0'
                 status = false
             } else {
                 this.error[3] = false
                 this.errorMsg[3] = ''
             }
 
-            if(this.datainscr.trim() == ""){
+            if(this.datasorteio.trim() == ""){
                 this.error[4] = true
                 this.errorMsg[4] = 'Este campo não pode estar vazio'
                 status = false
             } else {
                 this.error[4] = false
                 this.errorMsg[4] = ''
+            }
+
+            if(this.datainscr.trim() == ""){
+                this.error[5] = true
+                this.errorMsg[5] = 'Este campo não pode estar vazio'
+                status = false
+            } else {
+                this.error[5] = false
+                this.errorMsg[5] = ''
             }
 
             if(!status) return;
@@ -136,7 +160,8 @@ export default defineComponent({
                 premios: this.premios,
                 qt_venc: this.qtvencedores,
                 data_so: data_sort,
-                data_in: data_insc
+                data_in: data_insc,
+                tipo:    this.tipo
             })
 
             if(res.code() == 200){
