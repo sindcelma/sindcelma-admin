@@ -13,7 +13,7 @@
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
-                        <tr v-for="sorteio in sorteios" :key="sorteio">
+                        <tr v-for="sorteio in sorteios" :key="sorteio.sorteio_id">
                             <th scope="row">{{ sorteio.sorteio_id }}</th>
                             <td>{{ sorteio.titulo }}</td>
                             <td>{{ sorteio.data }}</td>
